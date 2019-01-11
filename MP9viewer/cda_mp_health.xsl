@@ -11,7 +11,7 @@
       a table. The blocks are grouped by active status (current, future or recent past), by
       treatment group ('medicamenteuze behandeling' = MBH) and by type ('medicatieafspraak',
       'toedieningsafspraak', 'gebruik').</xd:p>
-			<xd:p>The input XML is based on the AORTA 9.0.6 specification.</xd:p>
+			<xd:p>The input XML is based on the AORTA 9.0.7 specification.</xd:p>
 			<xd:p>Note that this transformation uses XSLT (and XPATH) 2.0, which not all XML tools and browsers support.</xd:p>
 		</xd:desc>
 	</xd:doc>
@@ -35,12 +35,28 @@
 
 	<!-- variables for template ids -->
 	<!-- Note that there is also a MA template 9185, but that is only used for proposal messages, which this viewer doesn't support -->
-	<xsl:variable name="ma_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9148', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9202', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9216'"/>
-	<xsl:variable name="ta_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9152', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9205', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9223'"/>
-	<xsl:variable name="gb_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9154', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9190', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9209', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9224'"/>
+    <xsl:variable name="ma_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9148', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9202', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9216', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9233'"/>
+    <xsl:variable name="ta_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9152', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9205', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9223', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9256'"/>
+    <xsl:variable name="gb_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9154', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9190', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9209', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9224','2.16.840.1.113883.2.4.3.11.60.20.77.10.9250'"/>
 	<xsl:variable name="mbh_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9084'"/>
-	
-	
+<!-- medicatieoverzicht -->
+    <xsl:variable name="mo_org_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9132', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9204', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9245'"/>
+    <xsl:variable name="mo_cda_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9146', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9207', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9243'"/>
+   <!-- medicatiegegevens -->
+    <xsl:variable name="mg_org_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9104', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9221', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9239'"/>
+    <xsl:variable name="mg_cda_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9133', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9222', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9236'"/>
+    <!-- sturen gebruik -->
+    <xsl:variable name="sg_org_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9125', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9191', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9225', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9252'"/>
+    <xsl:variable name="sg_cda_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9138', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9198', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9227', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9249'"/>
+    <!-- stoptype -->
+    <xsl:variable name="stoptype_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9067'"/>
+    <!-- gebruikindicator -->
+    <xsl:variable name="gebruikindicator_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9189'"/>
+    <!-- reden medicatieafspraak -->
+    <xsl:variable name="redenma_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9068', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9270'"/>
+    <!-- reden medicatiegebruik -->
+    <xsl:variable name="redenmgb_templateId" as="xs:string*" select="'2.16.840.1.113883.2.4.3.11.60.20.77.10.9115', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9271'"/>
+        
 	<!-- Document Types enumeration  ('Constants' for the different types)
        for this viewer only a few types are supported:
         MO = medication overview - srtuctured collection of components from a single source
@@ -116,7 +132,7 @@
 			<xsl:when test="hl7:MCCI_IN200101">
 				<xsl:apply-templates select="hl7:MCCI_IN200101"/>
 			</xsl:when>
-			<xsl:when test="hl7:*[hl7:interactionId]/hl7:ControlActProcess/hl7:ClinicalDocument">
+			<xsl:when test="hl7:*[hl7:interactionId]/hl7:ControlActProcess/hl7:subject/hl7:ClinicalDocument">
 				<xsl:for-each select="hl7:QUMA_IN991203NL01/hl7:ControlActProcess/hl7:subject[hl7:ClinicalDocument]">
 					<!-- Show the most recent MO first (in case these are MO's - otherwise the sorting has no effect) -->
 					<xsl:sort select="*/effectiveTime/@value" order="descending"/>
@@ -124,11 +140,13 @@
 						<xsl:with-param name="doHeader" select="true()"/>
 					</xsl:call-template>
 				</xsl:for-each>
-				<!--<xsl:apply-templates select="hl7:*[hl7:interactionId]/hl7:ControlActProcess/hl7:ClinicalDocument">
-          <xsl:with-param name="doHeader" select="true()"/>
-        </xsl:apply-templates>-->
+				<xsl:for-each select="hl7:*[hl7:interactionId]/hl7:ControlActProcess/hl7:subject/hl7:ClinicalDocument">
+					<xsl:call-template name="processDocumentOrOrganizer">
+						<xsl:with-param name="doHeader" select="true()"/>
+					</xsl:call-template>
+				</xsl:for-each>
 			</xsl:when>
-			<xsl:when test="hl7:*[hl7:interactionId]/hl7:ControlActProcess/hl7:organizer">
+			<xsl:when test="hl7:*[hl7:interactionId]/hl7:ControlActProcess/hl7:subject/hl7:organizer">
 				<xsl:for-each select="hl7:QUMA_IN991203NL01/hl7:ControlActProcess/hl7:subject[organizer]">
 					<!-- Show the most recent MO first (in case these are MO's - otherwise the sorting has no effect) -->
 					<xsl:sort select="*/effectiveTime/@value" order="descending"/>
@@ -136,9 +154,11 @@
 						<xsl:with-param name="doHeader" select="true()"/>
 					</xsl:call-template>
 				</xsl:for-each>
-				<!--<xsl:apply-templates select="hl7:*[hl7:interactionId]/hl7:ControlActProcess/hl7:organizer">
-          <xsl:with-param name="doHeader" select="true()"/>
-        </xsl:apply-templates>-->
+				<xsl:for-each select="hl7:*[hl7:interactionId]/hl7:ControlActProcess/hl7:subject/hl7:organizer">
+					<xsl:call-template name="processDocumentOrOrganizer">
+						<xsl:with-param name="doHeader" select="true()"/>
+					</xsl:call-template>
+				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="hl7:ClinicalDocument | hl7:organizer">
 				<xsl:call-template name="processDocumentOrOrganizer">
@@ -250,7 +270,7 @@
 			</xsl:for-each-group>
 		</xsl:variable>
 
-		<!-- Loop over all MBS's, reverse sorted by start date and display each component -->
+		<!-- Loop over all MBH's, reverse sorted by start date and display each component -->
 
 		<!-- First the MBH's that are currently active -->
 		<h3 class="current">
@@ -528,18 +548,18 @@
 		<xsl:param name="topNode" as="node()*"/>
 		<xsl:choose>
 			<xsl:when test="
-					($topNode//organizer/templateId[@root = ('2.16.840.1.113883.2.4.3.11.60.20.77.10.9132', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9204')] or
-					$topNode//ClinicalDocument/templateId[@root = ('2.16.840.1.113883.2.4.3.11.60.20.77.10.9146', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9207')])">
+					($topNode//organizer/templateId[@root = $mo_org_templateId] or
+					$topNode//ClinicalDocument/templateId[@root = $mo_cda_templateId])">
 				<xsl:value-of select="$DOCTYPE_MO"/>
 			</xsl:when>
 			<xsl:when test="
-					($topNode//organizer/templateId[@root = ('2.16.840.1.113883.2.4.3.11.60.20.77.10.9104', '2.16.840.1.113883.2.4.3.11.60.20.77.10.9221')] or
-					$topNode//ClinicalDocument/templateId[@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9133'])">
+					($topNode//organizer/templateId[@root = $mg_org_templateId] or
+					$topNode//ClinicalDocument/templateId[@root = $mg_cda_templateId])">
 				<xsl:value-of select="$DOCTYPE_MEDDATA"/>
 			</xsl:when>
 			<xsl:when test="
-					($topNode//organizer/templateId[@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9125'] or
-					$topNode//ClinicalDocument/templateId[@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9138'])">
+					($topNode//organizer/templateId[@root = $sg_org_templateId] or
+					$topNode//ClinicalDocument/templateId[@root = $sg_cda_templateId])">
 				<xsl:value-of select="$DOCTYPE_GEBRUIK"/>
 			</xsl:when>
 			<xsl:otherwise>
@@ -563,7 +583,7 @@
 		<xsl:variable name="registerAuthorDate" select="$componentNode/author/time/@value"/>
 		<!-- patient as author is also in author since 9.0.6, so variable below is only kept for backwards compatibility reasons -->
 		<xsl:variable name="registerPatientDate" select="$componentNode/participant[@typeCode = 'AUT' and participantRole/@classCode = 'PAT']/time/@value"/>
-		<xsl:variable name="isStop" as="xs:boolean" select="exists($componentNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9067'])"/>
+		<xsl:variable name="isStop" as="xs:boolean" select="exists($componentNode/entryRelationship/observation[templateId/@root = $stoptype_templateId])"/>
 
 		<xsl:choose>
 			<xsl:when test="$startDate and not($isStop)">
@@ -708,8 +728,8 @@
 
 		<xsl:choose>
 			<!-- MP 9.05 and higher -->
-			<xsl:when test="$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9189']/value/@value">
-				<xsl:value-of select="xs:boolean($substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9189']/value/@value)"/>
+			<xsl:when test="$substAdmNode/entryRelationship/observation[templateId/@root = $gebruikindicator_templateId]/value/@value">
+				<xsl:value-of select="xs:boolean($substAdmNode/entryRelationship/observation[templateId/@root = $gebruikindicator_templateId]/value/@value)"/>
 			</xsl:when>
 			<!-- MP 9.04 and earlier -->
 			<xsl:when test="$substAdmNode/@negationInd">
@@ -750,7 +770,7 @@
 
 				<xsl:variable name="startDate" select="nf:determineStartDateTime(.)" as="xs:dateTime"/>
 				<xsl:variable name="stopDate" select="./effectiveTime/high/@value"/>
-				<xsl:variable name="stopType" select="./entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9067']/value/@code"/>
+				<xsl:variable name="stopType" select="./entryRelationship/observation[templateId/@root = $stoptype_templateId]/value/@code"/>
 				<xsl:variable name="durationValue" select="./effectiveTime/width/@value"/>
 				<xsl:variable name="durationUnit" select="./effectiveTime/width/@unit"/>
 
@@ -782,7 +802,7 @@
 
 				<xsl:variable name="startDate" select="nf:determineStartDateTime(../..)" as="xs:dateTime"/>
 				<xsl:variable name="stopDate" select="../../effectiveTime/high/@value"/>
-				<xsl:variable name="stopType" select="../../entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9067']/value/@code"/>
+				<xsl:variable name="stopType" select="../../entryRelationship/observation[templateId/@root = $stoptype_templateId]/value/@code"/>
 				<xsl:variable name="durationValue" select="../../effectiveTime/width/@value"/>
 				<xsl:variable name="durationUnit" select="../../effectiveTime/width/@unit"/>
 
@@ -1070,7 +1090,7 @@
 
 		<xsl:variable name="componentType" select="nf:determineComponentType(.)"/>
 		<xsl:variable name="isStop" as="xs:boolean" select="
-				exists($substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9067']) or
+				exists($substAdmNode/entryRelationship/observation[templateId/@root = $stoptype_templateId]) or
 				not(nf:MedicationIsInUse($substAdmNode))"/>
 		<!-- if there is a stoptype, or medication in use indicator is false -->
 
@@ -1486,7 +1506,7 @@
 
 		<!-- If additional information is shown, also show TA 'Reden afspraak', unless it is a stop - then that reason is already shown below -->
 		<div id="debugInfo" class="hideDebugInfo">
-			<xsl:if test="not(exists($substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9067']))">
+			<xsl:if test="not(exists($substAdmNode/entryRelationship/observation[templateId/@root = $stoptype_templateId]))">
 				<xsl:value-of select="$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9083']/text"/>
 			</xsl:if>
 		</div>
@@ -1498,12 +1518,12 @@
 
 		<xsl:if test="
 				$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9160'] and
-				$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9067']">
+				$substAdmNode/entryRelationship/observation[templateId/@root = $stoptype_templateId]">
 			<br/>
 		</xsl:if>
 		<!-- 'reden van staken': found in 'reden van afspraak' different locations for ma, ta and gb. -->
-		<xsl:if test="$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9067']">
-			<xsl:variable name="stopType" select="$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9067']/value/@code" as="xs:decimal?"/>
+		<xsl:if test="$substAdmNode/entryRelationship/observation[templateId/@root = $stoptype_templateId]">
+			<xsl:variable name="stopType" select="$substAdmNode/entryRelationship/observation[templateId/@root = $stoptype_templateId]/value/@code" as="xs:decimal?"/>
 
 			<xsl:choose>
 				<xsl:when test="$stopType eq $STOPTYPE_TEMP">
@@ -1516,15 +1536,12 @@
 
 			<xsl:text> </xsl:text>
 			<!-- Whitespace between icon and text -->
-			<xsl:value-of select="$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9068']/value/@displayName"/>
+			<xsl:value-of select="$substAdmNode/entryRelationship/observation[templateId/@root = $redenma_templateId]/value/@displayName"/>
 			<xsl:value-of select="$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9083']/text"/>
-			<xsl:value-of select="$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9115']/value/@displayName"/>
+			<xsl:value-of select="$substAdmNode/entryRelationship/observation[templateId/@root = $redenmgb_templateId]/value/@displayName"/>
 		</xsl:if>
-
-
 		<!-- reden stoppen/wijzigen gebruik -->
-		<xsl:value-of select="$substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9115']/value/@displayName"/>
-
+		<xsl:value-of select="$substAdmNode/entryRelationship/observation[templateId/@root = $redenmgb_templateId]/value/@displayName"/>
 	</xsl:template>
 
 
@@ -1552,7 +1569,7 @@
 		<!-- Gerda decided 'Reden van afspraak' will usually not be filled, and showing it night cause confusion, so it is not displayed  
    <!-\- Display 'Reden van afspraak' unless it is a Stop - then the reason is already displayed in 'Reason' -\->
     <xsl:if
-      test="not($substAdmNode/entryRelationship/observation[templateId/@root = '2.16.840.1.113883.2.4.3.11.60.20.77.10.9067'])">
+      test="not($substAdmNode/entryRelationship/observation[templateId/@root = $stoptype_templateId])">
       <!-\- Add a line break if necessary -\->
       <xsl:if test="(exists($substAdmNode/entryRelationship/act[templateId/@root='2.16.840.1.113883.2.4.3.11.60.20.77.10.9069']) or
         exists($substAdmNode/entryRelationship/observation[templateId/@root='2.16.840.1.113883.2.4.3.11.60.20.77.10.9177'])) and 
