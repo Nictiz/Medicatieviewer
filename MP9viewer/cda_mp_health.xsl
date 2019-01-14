@@ -25,13 +25,15 @@
 	<xsl:output indent="yes" encoding="utf-8" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
 
 
-	<!-- For XSD schema validation in XSL Saxon-EE is required. That version is not available in Art-Decor,
-    but it is in oXygen, so the line below can be uncommented during development, but must be commented 
-    before distribution. -->
-	<!--<xsl:import-schema namespace="urn:hl7-org:v3"
-    schema-location="../SVN/Onderhoud_Mp_v90/XML/schemas_codegen/CDANL_extended.xsd"/>-->
-
-	<xsl:include href="nictizFunctions.xsl"/>
+    <!-- For XSD schema validation in XSL Saxon-EE is required. That version is not freely available, but it is in oXygen. 
+    The line below may therefore be uncommented during development, but must be commented before distribution if Saxon-EE is not available. -->
+    <!-- The XSD schema is not included with the mp viewer distribution but can be found on the internet in the MP publication XML download, for 9.0.7:
+    https://decor.nictiz.nl/medicatieproces/mp-xml-20181220T121121.zip
+    In that zip: mp-xml-20181220T121121\schemas_codeGen\CDANL_extended.xsd-->
+    <!-- include the correct path on your local device in the schema-location below if you want to do XSD schema validation in development -->
+    <!--<xsl:import-schema namespace="urn:hl7-org:v3" schema-location="../mp-xml-20181220T121121/schemas_codeGen"/CDANL_extended.xsd>-->
+    
+    <xsl:include href="nictizFunctions.xsl"/>
 
 	<!-- variables for template ids -->
 	<!-- Note that there is also a MA template 9185, but that is only used for proposal messages, which this viewer doesn't support -->
